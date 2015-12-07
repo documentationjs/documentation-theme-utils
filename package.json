@@ -16,7 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "doctrine": "^0.7.2",
-    "globals-docs": "^2.1.0"
+    "globals-docs": "^2.1.0",
+    "unist-builder": "^1.0.0"
   },
   "devDependencies": {
     "mdast": "^2.3.0",
