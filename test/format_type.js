@@ -3,7 +3,7 @@
 
 var formatType = require('../index').formatType,
   mdast = require('mdast'),
-  parseParamType = require('doctrine/lib/typed').parseParamType,
+  parse = require('doctrine').parse,
   test = require('tap').test;
 
 test('formatType', function (t) {
@@ -34,9 +34,16 @@ test('formatType', function (t) {
   ].forEach(function (example) {
     t.deepEqual(mdast().stringify({
       type: 'paragraph',
-      children: formatType(parseParamType(example[0]))
+      children: formatType(
+          parse('@param {' + example[0] + '} a', { sloppy: true }).tags[0].type)
     }), example[1], example[0]);
   });
+
+  t.deepEqual(mdast().stringify({
+    type: 'paragraph',
+    children: formatType(
+        parse('@param {number} [a=1]', { sloppy: true }).tags[0].type)
+  }), '[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)=', 'default');
 
   t.deepEqual(formatType(), [], 'empty case');
 

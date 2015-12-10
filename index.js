@@ -120,7 +120,8 @@ function formatType(node, getNamedLink) {
     // lets the expression be omitted.
     return decorate(formatType(node.expression, getNamedLink), '...', true);
   case Syntax.OptionalType:
-    return decorate(formatType(node.expression, getNamedLink), '=');
+    return decorate(formatType(node.expression, getNamedLink), '=').concat(
+        node.default ? t('(default ' + node.default + ')') : []);
   case Syntax.NonNullableType:
     return decorate(formatType(node.expression, getNamedLink), '!', node.prefix);
   case Syntax.NullableType:
