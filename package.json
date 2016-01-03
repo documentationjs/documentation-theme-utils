@@ -20,7 +20,7 @@
     "unist-builder": "^1.0.0"
   },
   "devDependencies": {
-    "mdast": "^2.3.0",
+    "remark": "^3.0.0",
     "tap": "^2.3.1"
   }
 }
