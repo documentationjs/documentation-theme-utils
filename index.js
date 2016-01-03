@@ -77,11 +77,11 @@ function formatType(node, getNamedLink) {
 
   case Syntax.TypeApplication:
     return formatType(node.expression, getNamedLink)
-      .concat(commaList(getNamedLink, node.applications, '.&lt;', '&gt;'));
+      .concat(commaList(getNamedLink, node.applications, '.<', '>'));
   case Syntax.UnionType:
     return commaList(getNamedLink, node.elements, '(', ')', '|');
   case Syntax.ArrayType:
-    return commaList(getNamedLink, node.elements, '&#91;', '&#93;');
+    return commaList(getNamedLink, node.elements, '[', ']');
   case Syntax.RecordType:
     return commaList(getNamedLink, node.fields, '{', '}');
 
