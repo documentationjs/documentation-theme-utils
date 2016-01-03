@@ -1,6 +1,6 @@
 {
   "name": "documentation-theme-utils",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "helpers for building themes with documentation.js",
   "main": "index.js",
   "scripts": {
