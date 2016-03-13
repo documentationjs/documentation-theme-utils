@@ -45,7 +45,7 @@ function decorate(formatted, str, prefix) {
  * @param {Object} node type object in doctrine style
  * @param {function(text): text} getNamedLink a function that tries
  * to find a URL to point a named link to
- * @returns {string} string
+ * @returns {Object[]} array of [mdast](https://www.npmjs.com/package/mdast) syntax trees
  * @example
  * var x = { type: 'NameExpression', name: 'String' };
  * // in template
