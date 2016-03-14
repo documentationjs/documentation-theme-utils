@@ -6,19 +6,10 @@ function t(text) {
   return u('text', text);
 }
 
-/**
- * Helper used to automatically link items to global JS documentation or to internal
- * documentation.
- *
- * @param {String} text - text to potentially link
- * @param {function} [getHref] - a function that tries
- * to find a URL to point a named link to
- * @returns {Object} [mdast](https://www.npmjs.com/package/mdast) node
- */
-function link(text, getHref, description) {
-  var href = (getHref && getHref(text)) || globalsDocs.getDoc(text);
-  if (href) {
-    return u('link', { href: href }, [u('text', description || text)]);
+function link(text) {
+  var docs = globalsDocs.getDoc(text);
+  if (docs) {
+    return u('link', { href: docs }, [u('text', text)]);
   }
   return u('text', text);
 }
@@ -51,8 +42,8 @@ function decorate(formatted, str, prefix) {
  * Helper used to format JSDoc-style type definitions into HTML or Markdown.
  *
  * @name formatType
- * @param {Object} node - type object in doctrine style
- * @param {function} getHref - a function that tries
+ * @param {Object} node type object in doctrine style
+ * @param {function(text): text} getNamedLink a function that tries
  * to find a URL to point a named link to
  * @returns {Object[]} array of [mdast](https://www.npmjs.com/package/mdast) syntax trees
  * @example
@@ -61,7 +52,7 @@ function decorate(formatted, str, prefix) {
  * // {{ type x }}
  * // generates String
  */
-function formatType(node, getHref) {
+function formatType(node, getNamedLink) {
   var result = [];
 
   if (!node) {
@@ -78,25 +69,25 @@ function formatType(node, getHref) {
   case Syntax.VoidLiteral:
     return [t('void')];
   case Syntax.UndefinedLiteral:
-    return [link('undefined', getHref)];
+    return [link('undefined')];
   case Syntax.NameExpression:
-    return [link(node.name, getHref)];
+    return [link(node.name)];
   case Syntax.ParameterType:
-    return [t(node.name + ': ')].concat(formatType(node.expression, getHref));
+    return [t(node.name + ': ')].concat(formatType(node.expression, getNamedLink));
 
   case Syntax.TypeApplication:
-    return formatType(node.expression, getHref)
-      .concat(commaList(getHref, node.applications, '.<', '>'));
+    return formatType(node.expression, getNamedLink)
+      .concat(commaList(getNamedLink, node.applications, '.<', '>'));
   case Syntax.UnionType:
-    return commaList(getHref, node.elements, '(', ')', '|');
+    return commaList(getNamedLink, node.elements, '(', ')', '|');
   case Syntax.ArrayType:
-    return commaList(getHref, node.elements, '[', ']');
+    return commaList(getNamedLink, node.elements, '[', ']');
   case Syntax.RecordType:
-    return commaList(getHref, node.fields, '{', '}');
+    return commaList(getNamedLink, node.fields, '{', '}');
 
   case Syntax.FieldType:
     if (node.value) {
-      return [t(node.key + ': ')].concat(formatType(node.value, getHref));
+      return [t(node.key + ': ')].concat(formatType(node.value, getNamedLink));
     }
     return [t(node.key)];
 
@@ -110,36 +101,35 @@ function formatType(node, getHref) {
         result.push(t('this: '));
       }
 
-      result = result.concat(formatType(node['this'], getHref));
+      result = result.concat(formatType(node['this'], getNamedLink));
 
       if (node.params.length !== 0) {
         result.push(t(', '));
       }
     }
 
-    result = result.concat(commaList(getHref, node.params, '', ')'));
+    result = result.concat(commaList(getNamedLink, node.params, '', ')'));
 
     if (node.result) {
-      result = result.concat([t(': ')].concat(formatType(node.result, getHref)));
+      result = result.concat([t(': ')].concat(formatType(node.result, getNamedLink)));
     }
     return result;
 
   case Syntax.RestType:
     // note that here we diverge from doctrine itself, which
     // lets the expression be omitted.
-    return decorate(formatType(node.expression, getHref), '...', true);
+    return decorate(formatType(node.expression, getNamedLink), '...', true);
   case Syntax.OptionalType:
-    return decorate(formatType(node.expression, getHref), '=').concat(
+    return decorate(formatType(node.expression, getNamedLink), '=').concat(
         node.default ? t('(default ' + node.default + ')') : []);
   case Syntax.NonNullableType:
-    return decorate(formatType(node.expression, getHref), '!', node.prefix);
+    return decorate(formatType(node.expression, getNamedLink), '!', node.prefix);
   case Syntax.NullableType:
-    return decorate(formatType(node.expression, getHref), '?', node.prefix);
+    return decorate(formatType(node.expression, getNamedLink), '?', node.prefix);
 
   default:
     throw new Error('Unknown type ' + node.type);
   }
 }
 
-module.exports.link = link;
 module.exports.formatType = formatType;
