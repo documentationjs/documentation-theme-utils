@@ -2,6 +2,7 @@
 'use strict';
 
 var formatType = require('../index').formatType,
+  link = require('../index').link,
   remark = require('remark'),
   parse = require('doctrine').parse,
   test = require('tap').test;
@@ -44,6 +45,12 @@ test('formatType', function (t) {
     children: formatType(
         parse('@param {number} [a=1]', { sloppy: true }).tags[0].type)
   }), '[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)=', 'default');
+
+  t.deepEqual(remark().stringify({
+    type: 'paragraph',
+    children: formatType(
+      parse('@param {Foo} a', { sloppy: true }).tags[0].type, function () { return '#Foo' })
+  }), '[Foo](#Foo)', 'with getHref');
 
   t.deepEqual(formatType(), [], 'empty case');
 
