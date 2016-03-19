@@ -18,7 +18,10 @@ function t(text) {
 function link(text, getHref, description) {
   var href = (getHref && getHref(text)) || globalsDocs.getDoc(text);
   if (href) {
-    return u('link', { href: href }, [u('text', description || text)]);
+    // TODO: this is a temporary fix until we drop remark 3.x support,
+    // and then we should remove the 'href' property and only
+    // have the url property of links
+    return u('link', { href: href, url: href }, [u('text', description || text)]);
   }
   return u('text', text);
 }
