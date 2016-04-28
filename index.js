@@ -89,9 +89,9 @@ function formatType(node, getHref) {
 
   case Syntax.TypeApplication:
     return formatType(node.expression, getHref)
-      .concat(commaList(getHref, node.applications, '.<', '>'));
+      .concat(commaList(getHref, node.applications, '<', '>'));
   case Syntax.UnionType:
-    return commaList(getHref, node.elements, '(', ')', '|');
+    return commaList(getHref, node.elements, '(', ')', ' | ');
   case Syntax.ArrayType:
     return commaList(getHref, node.elements, '[', ']');
   case Syntax.RecordType:
@@ -132,7 +132,7 @@ function formatType(node, getHref) {
     // lets the expression be omitted.
     return decorate(formatType(node.expression, getHref), '...', true);
   case Syntax.OptionalType:
-    return decorate(formatType(node.expression, getHref), '=').concat(
+    return decorate(decorate(formatType(node.expression, getHref), '[', true), ']').concat(
         node.default ? t('(default ' + node.default + ')') : []);
   case Syntax.NonNullableType:
     return decorate(formatType(node.expression, getHref), '!', node.prefix);
