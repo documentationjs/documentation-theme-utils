@@ -13,8 +13,8 @@ test('formatType', function (t) {
     ['null', 'null'],
     ['null', 'null'],
     ['*', 'Any'],
-    ['Array|undefined', '([Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)\\|[undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined))'],
-    ['Array<number>', '[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).&lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)>'],
+    ['Array|undefined', '([Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) \\| [undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined))'],
+    ['Array<number>', '[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)>'],
     ['number!', '[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)!'],
     ['function(string, boolean)', 'function ([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean))'],
     ['function(string, boolean): number', 'function ([string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String), [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)): [number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)'],
@@ -29,7 +29,7 @@ test('formatType', function (t) {
     ['void', 'void'],
     ['function(a:b)', 'function (a: b)'],
     ['function(a):void', 'function (a): void'],
-    ['number=', '[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)='],
+    ['number=', '\\[[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)]'],
     ['...number', '...[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)'],
     ['undefined', '[undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined)']
   ].forEach(function (example) {
@@ -44,7 +44,7 @@ test('formatType', function (t) {
     type: 'paragraph',
     children: formatType(
         parse('@param {number} [a=1]', { sloppy: true }).tags[0].type)
-  }), '[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)=', 'default');
+  }), '\\[[number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)]', 'default');
 
   t.deepEqual(remark().stringify({
     type: 'paragraph',
