@@ -14,6 +14,8 @@ function t(text) {
  * @param {function} [getHref] - a function that tries
  * to find a URL to point a named link to
  * @returns {Object} [mdast](https://www.npmjs.com/package/mdast) node
+ * @example
+ * link('string').url // => 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String'
  */
 function link(text, getHref, description) {
   var href = (getHref && getHref(text)) || globalsDocs.getDoc(text);
@@ -59,10 +61,7 @@ function decorate(formatted, str, prefix) {
  * to find a URL to point a named link to
  * @returns {Object[]} array of [mdast](https://www.npmjs.com/package/mdast) syntax trees
  * @example
- * var x = { type: 'NameExpression', name: 'String' };
- * // in template
- * // {{ type x }}
- * // generates String
+ * formatType({ type: 'NameExpression', name: 'String' })[0].url // => 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String'
  */
 function formatType(node, getHref) {
   var result = [];
